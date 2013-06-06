@@ -1,8 +1,6 @@
 /*
- *  ofxDSP
+ *  ofxReverb
  *  created by: Joshua Paris Batty
- *  an addon that ties some juicy open source DSP code that i have found floating around
- *	for openFrameworks.
  *	freeverb the classic *free* reverb code is included.
  */
 
