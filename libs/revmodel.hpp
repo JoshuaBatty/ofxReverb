@@ -7,6 +7,7 @@
 #ifndef _revmodel_
 #define _revmodel_
 
+#include "ofMain.h"
 #include "comb.hpp"
 #include "allpass.hpp"
 #include "tuning.h"
@@ -18,7 +19,8 @@ public:
 			void	mute();
 			void	processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
 			void	processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
-			void	setroomsize(float value);
+            ofVec2f	processReturn(float *inputL, float *inputR, long numsamples, int skip);
+            void	setroomsize(float value);
 			float	getroomsize();
 			void	setdamp(float value);
 			float	getdamp();

@@ -71,6 +71,43 @@ void revmodel::mute()
 	}
 }
 
+ofVec2f revmodel::processReturn(float *inputL, float *inputR, long numsamples, int skip)
+{
+	float outL,outR,input;
+    ofVec2f output = ofVec2f(0.0,0.0);
+    
+	while(numsamples-- > 0)
+	{
+		outL = outR = 0;
+		input = (*inputL + *inputR) * gain;
+        
+		// Accumulate comb filters in parallel
+		for(int i=0; i<numcombs; i++)
+		{
+			outL += combL[i].process(input);
+			outR += combR[i].process(input);
+		}
+        
+		// Feed through allpasses in series
+		for(int j=0; j<numallpasses; j++)
+		{
+			outL = allpassL[j].process(outL);
+			outR = allpassR[j].process(outR);
+		}
+        
+		// Calculate output REPLACING anything already there
+		output.x = outL*wet1 + outR*wet2 + *inputL*dry;
+		output.y = outR*wet1 + outL*wet2 + *inputR*dry;
+        
+		// Increment sample pointers, allowing for interleave (if any)
+		inputL += skip;
+		inputR += skip;
+		output.x += skip;
+		output.y += skip;
+	}
+    return output;
+}
+
 void revmodel::processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip)
 {
 	float outL,outR,input;
